@@ -23,8 +23,8 @@ const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))
 function validarInput(element, minLenght, maxLength, regex){
     const closest = $(element).closest('.input-data');
     if (!element.value 
-        || (minLenght && element.value.trim().lenght > minLenght) 
-        || (maxLength && element.value.trim().lenght > maxLength)
+        || (minLenght && element.value.trim().lenght < minLenght)
+        || (maxLength && element.value.trim().lenght < maxLength)
         || (regex && !element.value.toLowerCase().match(regex))
         ) {
         closest.addClass('error');
@@ -38,12 +38,23 @@ function validaFormularioUm(){
     if (nomeValido && sobrenomeValido && emailValido && dataNascimentoValido){
         $containerBtnFormOne.removeClass('disabled');
         $btnFormOne.removeClass('disabled');
+        $btnFormOne.off('click').on('click', inciarFormulario2)
     }else{
         $containerBtnFormOne.addClass('disabled');
         $btnFormOne.addClass('disabled');
+        $btnFormOne.off('click')
+
     }
 }
 
+
+function inciarFormulario2(){
+    $stepText.text('Passo 2 de 3 - Dados de correspondência');
+    $stepDescription.text('Precisamos desses dados para que possamos entrar em contato caso necessário.');
+    $stepOne.hide();
+    $stepTwo.show();
+}
+     
 function init(){
     $stepText.text('Passo 1 de 3 - Dados Pessoais');
     $stepDescription.text('Descreva seus dados para que possamos te conhecer melhor.');
