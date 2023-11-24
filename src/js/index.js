@@ -6,19 +6,30 @@ const $stepThree = $('.step.three');
 
 const $containerBtnFormOne = $('#containerBtnFormOne');
 const $btnFormOne = $('#btnFormOne');
+const $containerBtnFormTwo = $('#containerBtnFormTwo');
+const $btnFormTwo = $('#btnFormTwo');
 const $inputNome = $('#nome');
 const $inputSobrenome = $('#sobrenome');
 const $inputDataNascimento = $('#dataNascimento');
 const $inputEmail = $('#email');
 const $inputMinibio = $('#minibio');
+const $inputEndereco = $('#endereco');
+const $inputComplemento = $('#complemento');
+const $inputCidade = $('#cidade');
+const $inputCep = $('#cep');
 
 let nomeValido = false;
 let sobrenomeValido = false;
 let dataNascimentoValido = false;
 let emailValido = false;
+let enderecoValido = false;
+let cidadeValido = false;
+let cepValido = false;
 
 const minLenghtText = 2;
+const minLenghtTextArea = 10;
 const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const cepRegex = /^([\d]{2})([\d]{3})([\d]{3})|^[\d]{2}.[\d]{3}-[\d]{3}/
 
 function validarInput(element, minLenght, maxLength, regex){
     const closest = $(element).closest('.input-data');
@@ -34,7 +45,7 @@ function validarInput(element, minLenght, maxLength, regex){
     return true;
 }
 
-function validaFormularioUm(){
+function validarFormularioUm(){
     if (nomeValido && sobrenomeValido && emailValido && dataNascimentoValido){
         $containerBtnFormOne.removeClass('disabled');
         $btnFormOne.removeClass('disabled');
@@ -43,16 +54,47 @@ function validaFormularioUm(){
         $containerBtnFormOne.addClass('disabled');
         $btnFormOne.addClass('disabled');
         $btnFormOne.off('click')
-
     }
 }
-
 
 function inciarFormulario2(){
     $stepText.text('Passo 2 de 3 - Dados de correspondência');
     $stepDescription.text('Precisamos desses dados para que possamos entrar em contato caso necessário.');
     $stepOne.hide();
     $stepTwo.show();
+
+    $inputEndereco.keyup(function(){
+        enderecoValido = validarInput(this, minLenghtTextArea);
+        validarFormularioDois();
+    });
+
+    $inputCidade.keyup(function(){
+        cidadeValido = validarInput(this, minLenghtText);
+        validarFormularioDois();
+    });
+
+    $inputCep.keyup(function(){
+        this.value = this.value.replace(/\D/g,'');
+        cepValido = validarInput(this, null, null, cepRegex);
+        if(cepValido){
+            this.value = this.value.replace(cepRegex, "$1.$2-$3")
+        }
+        validarFormularioDois();
+    });
+
+    $inputComplemento.keyup(function(){
+        validarFormularioDois();
+    });
+}
+
+function validarFormularioDois(){
+    if(enderecoValido && cidadeValido && cepValido){
+        $containerBtnFormTwo.removeClass('disabled');
+        $btnFormTwo.removeClass('disabled');
+    }else{
+        $containerBtnFormTwo.addClass('disabled');
+        $btnFormTwo.addClass('disabled');
+    }
 }
      
 function init(){
@@ -63,31 +105,31 @@ function init(){
 
     $inputNome.keyup(function(){
        nomeValido = validarInput(this, minLenghtText);
-       validaFormularioUm();
+       validarFormularioUm();
     });
 
     $inputSobrenome.keyup(function(){
         sobrenomeValido = validarInput(this, minLenghtText);
-        validaFormularioUm();
+        validarFormularioUm();
     });
 
     $inputDataNascimento.keyup(function(){
         dataNascimentoValido = validarInput(this, minLenghtText);
-        validaFormularioUm();
+        validarFormularioUm();
     });
 
     $inputDataNascimento.change(function(){
         dataNascimentoValido = validarInput(this, minLenghtText);
-        validaFormularioUm();
+        validarFormularioUm();
     });
 
     $inputEmail.keyup(function(){
         emailValido = validarInput(this, null, null, emailRegex);
-        validaFormularioUm();
+        validarFormularioUm();
     });
 
     $inputMinibio.keyup(function(){
-        validaFormularioUm();
+        validarFormularioUm();
     });
 
     $inputDataNascimento.on('focus', function(){
