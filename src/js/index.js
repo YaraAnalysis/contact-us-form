@@ -8,6 +8,8 @@ const $containerBtnFormOne = $('#containerBtnFormOne');
 const $btnFormOne = $('#btnFormOne');
 const $containerBtnFormTwo = $('#containerBtnFormTwo');
 const $btnFormTwo = $('#btnFormTwo');
+const $containerBtnFormThree = $('#containerBtnFormThree');
+const $btnFormThree = $('#btnFormThree');
 const $inputNome = $('#nome');
 const $inputSobrenome = $('#sobrenome');
 const $inputDataNascimento = $('#dataNascimento');
@@ -17,6 +19,8 @@ const $inputEndereco = $('#endereco');
 const $inputComplemento = $('#complemento');
 const $inputCidade = $('#cidade');
 const $inputCep = $('#cep');
+const $inputHabilidades = $('#habilidades');
+const $inputPontosForte = $('#pontosForte');
 
 let nomeValido = false;
 let sobrenomeValido = false;
@@ -25,6 +29,8 @@ let emailValido = false;
 let enderecoValido = false;
 let cidadeValido = false;
 let cepValido = false;
+let habilidadesValido = false;
+let pontosForteValido = false;
 
 const minLenghtText = 2;
 const minLenghtTextArea = 10;
@@ -91,12 +97,41 @@ function validarFormularioDois(){
     if(enderecoValido && cidadeValido && cepValido){
         $containerBtnFormTwo.removeClass('disabled');
         $btnFormTwo.removeClass('disabled');
+        $btnFormTwo.off('click').on('click', inciarFormulario3);
     }else{
         $containerBtnFormTwo.addClass('disabled');
         $btnFormTwo.addClass('disabled');
+        $btnFormTwo.off('click');
     }
 }
-     
+
+function inciarFormulario3(){
+    $stepText.text('Passo 3 de 3 - Fale sobre você');
+    $stepDescription.text('Para que possamos filtrar você melhor, no processo, conte-nos um pouco mais sobre sua habilidades e pontos positivos.');
+    $stepTwo.hide();
+    $stepThree.show();
+
+    $inputHabilidades.keyup(function(){
+        habilidadesValido = validarInput(this, minLenghtTextArea);
+        validarFormularioTres();
+    });
+
+    $inputPontosForte.keyup(function(){
+        pontosForteValido = validarInput(this, minLenghtTextArea);
+        validarFormularioTres();
+    });
+}
+
+function validarFormularioTres(){
+    if (habilidadesValido && pontosForteValido){
+        $containerBtnFormThree.removeClass('disabled');
+        $btnFormThree.removeClass('disabled');
+    }else{
+        $containerBtnFormThree.addClass('disabled');
+        $btnFormThree.addClass('disabled');
+    }
+}
+
 function init(){
     $stepText.text('Passo 1 de 3 - Dados Pessoais');
     $stepDescription.text('Descreva seus dados para que possamos te conhecer melhor.');
