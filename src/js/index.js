@@ -123,11 +123,69 @@ function inciarFormulario3(){
     });
 }
 
+async function salvarNoTrello(){
+    try{
+        const nome = $inputNome.val();
+        const sobrenome = $inputSobrenome.val();
+        const email = $inputEmail.val();
+        const dataNascimento = $inputDataNascimento.val();
+        const minibio = $inputMinibio.val();
+        const endereco = $inputEndereco.val();
+        const complemento = $inputComplemento.val();
+        const cidade = $inputCidade.val();
+        const cep = $inputCep.val();
+        const habilidades = $inputHabilidades.val();
+        const pontosFortes = $inputPontosForte.val();
+
+        if(!nome || !sobrenome || !email || !dataNascimento 
+            || !endereco || !cidade || !cep || !habilidades 
+            || !pontosFortes){
+                return alert('Favor preencher todos os dados obrigatórios para seguir.');
+        }
+
+        const body = {
+            name: "Candidato(a) - " + nome + " " + sobrenome,
+            desc: `
+                Dados do candidato(a):
+
+                ------------- Dados pessoais -------------
+                Nome: ${nome}
+                Sobrenome: ${sobrenome}
+                Email: ${email}
+                Data de Nascimento: ${dataNascimento}
+                Minibio: ${minibio}
+
+                ------------- Endereço -------------
+                Endereço: ${endereco}
+                Complemento: ${complemento}
+                Cidade: ${cidade}
+                CEP: ${cep}
+
+                ------------- Perfil -------------
+                Habilidades: ${habilidades}
+                Pontos Fortes: ${pontosFortes}
+                `
+        }
+
+        await fetch('https://api.trello.com/1/cards?idList=656e705236ce84f8f4d81a26&key=11427cd6fd77727014a3a64a8557c133&token=ATTAad0328345b609ca218c7c151c3e337afe2376d4c9b5f78de073f71085e5d9260211D7EEB', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        return finalizarFormulario();
+    }catch(e){
+        console.log('Ocorreu erro ao salvar no Trello: ', e);
+    }
+}
+
 function validarFormularioTres(){
     if (habilidadesValido && pontosForteValido){
         $containerBtnFormThree.removeClass('disabled');
         $btnFormThree.removeClass('disabled');
-        $btnFormThree.off('click').on('click', finalizarFormulario);
+        $btnFormThree.off('click').on('click', salvarNoTrello);
     }else{
         $containerBtnFormThree.addClass('disabled');
         $btnFormThree.addClass('disabled');
