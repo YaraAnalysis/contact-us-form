@@ -3,6 +3,7 @@ const $stepDescription = $('#step-description');
 const $stepOne = $('.step.one');
 const $stepTwo = $('.step.two');
 const $stepThree = $('.step.three');
+const $title = $('#title');
 
 const $containerBtnFormOne = $('#containerBtnFormOne');
 const $btnFormOne = $('#btnFormOne');
@@ -126,10 +127,19 @@ function validarFormularioTres(){
     if (habilidadesValido && pontosForteValido){
         $containerBtnFormThree.removeClass('disabled');
         $btnFormThree.removeClass('disabled');
+        $btnFormThree.off('click').on('click', finalizarFormulario);
     }else{
         $containerBtnFormThree.addClass('disabled');
         $btnFormThree.addClass('disabled');
+        $btnFormThree.off('click');
     }
+}
+
+function finalizarFormulario(){
+    $stepThree.hide();
+    $stepDescription.hide();
+    $title.text('Inscrição realizada com sucesso!');
+    $stepText.text('Agradecemos sua inscrição. Entraremos em contato assim que possível. Nosso prazo de análise é de 5 dias úteis.');
 }
 
 function init(){
